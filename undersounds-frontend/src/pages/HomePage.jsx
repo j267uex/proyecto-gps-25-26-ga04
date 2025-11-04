@@ -8,6 +8,7 @@ import { AlbumContext } from '../context/AlbumContext';
 import { AuthContext } from '../context/AuthContext';
 import { fetchAlbums } from '../services/jamendoService';
 
+// tarea GA04-93-H5.1 legada
 const HomePage = () => {
   const [news, setNews] = useState([]);
   const [albums, setAlbums] = useState([]);
