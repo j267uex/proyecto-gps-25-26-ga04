@@ -25,7 +25,7 @@ const ArtistProfile = () => {
   const handleTshirtClick = (tshirt_Id) => {
     navigate(`/tshirt/${tshirt_Id}`);
   };
-
+//Tarea GA04-17 H5.2.1 Legada
   useEffect(() => {
     // Cargar los datos del artista
     fetchArtistById(numericId)
