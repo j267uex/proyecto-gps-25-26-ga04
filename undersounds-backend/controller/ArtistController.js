@@ -50,6 +50,7 @@ class ArtistController {
     }
   }
 
+  // Tarea "GA04-2 H1.2" legada
   async updateArtist(req, res) {
     try {
       const numericId = Number(req.params.id);
