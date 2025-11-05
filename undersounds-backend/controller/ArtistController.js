@@ -25,7 +25,7 @@ class ArtistController {
       res.status(500).json({ error: error.message });
     }
   }
-
+// Tarea "GA04-2 H1.1" legada
   async createArtist(req, res) {
     try {
       const artistData = req.body;
