@@ -9,6 +9,7 @@ const nodemailer = require('nodemailer');
 const ArtistDAO = require('../model/dao/ArtistDAO');
 const ArtistaFactory = require('../model/factory/ArtistaFactory');
 
+// Tarea GA04-92 H21.1 legado
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
