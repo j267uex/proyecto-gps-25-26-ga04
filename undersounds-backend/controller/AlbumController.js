@@ -71,7 +71,9 @@ class AlbumController {
       res.status(500).json({ error: error.message });
     }
   }
-  
+
+  //Tarea GA04-55 H2.1.1 legada
+  //Tarea GA04-55 H2.1.2 legada  
   async createAlbum(req, res) {
     try {
       // Los datos del formulario se encuentran en req.body
