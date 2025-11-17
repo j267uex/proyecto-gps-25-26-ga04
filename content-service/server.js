@@ -16,6 +16,8 @@ const { exec, spawn } = require('child_process');
 const readline = require('readline');
 const Stripe = require('stripe');
 
+// Tarea GA04-65 H9.2.1 Inicio de checkout con Stripe cliente Legada
+
 mongoose.set('strictQuery', false);
 // Tarea GA04-49-H23.1.2 legada
 const app = express();
