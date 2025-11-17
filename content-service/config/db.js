@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 // Tarea GA04-38-H19.1 legada
+// Tarea GA04-48-H22.1.1 legada
+// Tarea GA04-48-H22.1.2 legada
 
 const connectDB = async () => {
   try {
