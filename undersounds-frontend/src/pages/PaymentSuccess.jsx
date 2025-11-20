@@ -14,6 +14,8 @@ import {
 import { Link } from 'react-router-dom';
 import { downloadTrack, downloadAlbum } from '../services/jamendoService';
 
+// Tarea GA04-19-H4.1-Control-de-descarga-tras-pago legada
+
 const PaymentSuccess = () => {
   const [orderSummary, setOrderSummary] = useState(null);
   const [selectedFormats, setSelectedFormats] = useState({});
