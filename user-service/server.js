@@ -27,6 +27,7 @@ app.use(compression());
 // HTTP request logging
 app.use(pinoHttp({ logger, autoLogging: true }));
 
+//TAREA GA04-54 H25.2 LEGADA
 // CORS - permitir orígenes configurables
 const CORS_ORIGINS = process.env.CORS_ORIGINS.split(',');
 app.use(cors({

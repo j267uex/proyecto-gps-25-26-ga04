@@ -431,7 +431,45 @@ async def recommend_for_user(user_id: str, limit: int = 20):
 async def _fetch_albums_by_genres(genres: list, limit: int) -> list:
     results = []
     async with httpx.AsyncClient() as client:
-        for g in genres:
+        for r in rows:
+            eid = r.get("_id")
+            count = r.get("count", 0)
+            entry = {"id": eid, "count": count, "type": None, "title": None, "artist": None, "albumId": None, "albumTitle": None}
+
+            if not eid:
+                enriched.append(entry)
+                continue
+
+            # Caso pista con formato "albumId_trackId" o "albumId_trackIndex"
+            if "_" in str(eid):
+                try:
+                    album_id, track_key = str(eid).split("_", 1)
+                    resp = await http_get_with_cb(client, f"{CONTENT_SERVICE_URL}/api/albums/{album_id}", timeout=5)
+                    if resp.status_code == 200:
+                        album = resp.json()
+                        tracks = album.get("tracks", []) or []
+                        # buscar por id o por índice
+                        track_obj = next((t for t in tracks if str(t.get("id")) == str(track_key) or str(t.get("_id")) == str(track_key)), None)
+                        if not track_obj and track_key.isdigit():
+                            idx = int(track_key) - 1
+                            if 0 <= idx < len(tracks):
+                                track_obj = tracks[idx]
+                        if track_obj:
+                            entry.update({
+                                "type": "track",
+                                "title": track_obj.get("title") or track_obj.get("name"),
+                                "artist": album.get("artist") or album.get("artistName"),
+                                "albumId": album_id,
+                                "albumTitle": album.get("title") or album.get("name")
+                            })
+                            enriched.append(entry)
+                            continue
+                except HTTPException:
+                    raise
+                except Exception:
+                    pass
+
+            # Intentar resolver como álbum
             try:
                 resp = await http_get_with_cb(client, f"{CONTENT_SERVICE_URL}/api/albums?genre={g}&limit={limit}", timeout=5)
                 if resp.status_code == 200:

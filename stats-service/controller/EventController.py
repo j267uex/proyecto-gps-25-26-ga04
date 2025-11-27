@@ -4,6 +4,8 @@ from datetime import datetime
 import os
 import httpx
 
+# Tarea GA04-50-H23.2-Optimización-de-petición-de-eventos legada
+
 from model.factory.EventFactory import EventFactory
 from model.dao.EventDAO import EventDAO
 from model.dao.ArtistKPIDAO import ArtistKPIDAO
@@ -28,6 +30,7 @@ async def _process_event_for_kpis(event: Dict[str, Any]):
         price = float(meta.get("price", 0) or 0)
         await ArtistKPIDAO.upsert_increment(str(artist_id), {"purchases": 1, "revenue": price})
 
+#tarea GA04-29-H12.2 legada
 # POST /stats/events
 @router.post("/stats/events", status_code=202)
 async def ingest_event(request: Request, background_tasks: BackgroundTasks):

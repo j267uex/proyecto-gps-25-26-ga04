@@ -153,10 +153,12 @@ def prompt_and_export():
                         shared_meta = json.loads(SHARED_META.read_text(encoding="utf-8"))
                 except Exception:
                     shared_meta = {}
+                
                 current_collections = shared_meta.get("colecciones", [])
                 new_version = int(shared_meta.get("dbVersion", 0)) + 1
                 update_version_file(SHARED_META, new_version, current_collections)
                 update_version_file(LOCAL_META, new_version, current_collections)
+                
         except Exception as e:
             logger.error("export_error", error=str(e))
     else:
