@@ -13,20 +13,23 @@ class AlbumDAO {
   
 async getAlbums(filter = {}, options = {}) {
   try {
+    // Whitelist of allowed filter fields to prevent NoSQL injection
+    const allowedFilterKeys = ['genre', 'artist', 'title', 'releaseYear', 'destacado', '_id', 'id'];
+    
     // Sanitize filter to prevent NoSQL injection
     const sanitizedFilter = {};
-    for (const key in filter) {
+    for (const key of allowedFilterKeys) {
       if (Object.prototype.hasOwnProperty.call(filter, key)) {
         const value = filter[key];
-        // Only allow primitive types (string, number, boolean) or ObjectId
+        // Only allow primitive types (string, number, boolean) or valid ObjectId
         if (typeof value === 'string') {
-          sanitizedFilter[key] = value.toString();
-        } else if (typeof value === 'number') {
+          sanitizedFilter[key] = String(value);
+        } else if (typeof value === 'number' && Number.isFinite(value)) {
           sanitizedFilter[key] = Number(value);
         } else if (typeof value === 'boolean') {
           sanitizedFilter[key] = Boolean(value);
-        } else if (mongoose.Types.ObjectId.isValid(value)) {
-          sanitizedFilter[key] = value;
+        } else if (mongoose.Types.ObjectId.isValid(value) && typeof value !== 'object') {
+          sanitizedFilter[key] = new mongoose.Types.ObjectId(String(value));
         }
         // Ignore objects/arrays that could contain malicious operators like $gt, $ne, $where
       }
