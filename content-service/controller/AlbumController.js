@@ -439,8 +439,9 @@ class AlbumController {
         return res.status(500).json({ error: 'Error al acceder a los archivos de música' });
       }
 
-      const tempDir = path.join(os.tmpdir(), `album-${id}-${Date.now()}`);
-      await fs.promises.mkdir(tempDir, { recursive: true });
+      const tempDir = `album-${id}-${Date.now()}`;
+
+      await fs.promises.mkdir(tempDir, { root: os.tmpdir() });
 
       // Procesar cada track
       const conversionPromises = album.tracks
@@ -459,11 +460,11 @@ class AlbumController {
           });
         });
 
-      await Promise.allSettled(conversionPromises);
+      await Promise.allSettled(conversionPromises, { root: os.tmpdir() });
 
       const files = await fs.promises.readdir(tempDir);
       if (files.length === 0) {
-        await fs.promises.rm(tempDir, { recursive: true, force: true });
+        await fs.promises.rm(tempDir, { root: os.tmpdir() });
         return res.status(500).json({ error: 'No se pudo generar ningún archivo' });
       }
 

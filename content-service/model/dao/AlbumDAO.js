@@ -13,7 +13,26 @@ class AlbumDAO {
   
 async getAlbums(filter = {}, options = {}) {
   try {
-    const query = Album.find(filter)
+    // Sanitize filter to prevent NoSQL injection
+    const sanitizedFilter = {};
+    for (const key in filter) {
+      if (Object.prototype.hasOwnProperty.call(filter, key)) {
+        const value = filter[key];
+        // Only allow primitive types (string, number, boolean) or ObjectId
+        if (typeof value === 'string') {
+          sanitizedFilter[key] = value.toString();
+        } else if (typeof value === 'number') {
+          sanitizedFilter[key] = Number(value);
+        } else if (typeof value === 'boolean') {
+          sanitizedFilter[key] = Boolean(value);
+        } else if (mongoose.Types.ObjectId.isValid(value)) {
+          sanitizedFilter[key] = value;
+        }
+        // Ignore objects/arrays that could contain malicious operators like $gt, $ne, $where
+      }
+    }
+
+    const query = Album.find(sanitizedFilter)
       .populate('artist', '_id id name bandName profileImage')
       .sort({ createdAt: -1 });
 
